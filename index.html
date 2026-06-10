@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>КнигоПоиск — найди книгу по лучшей цене</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9f9f9;
+            color: #222;
+            min-height: 100vh;
+        }
+        header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            padding: 40px 20px;
+            text-align: center;
+            color: white;
+        }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1.1em; opacity: 0.9; }
+        .search-box {
+            max-width: 600px; margin: 30px auto; padding: 0 20px;
+        }
+        .search-box input {
+            width: 100%; padding: 15px 20px; font-size: 1.1em;
+            border: 2px solid #ddd; border-radius: 30px; outline: none;
+            transition: border 0.3s;
+        }
+        .search-box input:focus { border-color: #3498db; }
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px; padding: 20px; max-width: 1200px; margin: 0 auto;
+        }
+        .book-card {
+            background: white; border-radius: 15px; overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s;
+            display: flex; flex-direction: column;
+        }
+        .book-card:hover { transform: translateY(-5px); }
+        .book-cover {
+            width: 100%; height: 280px; object-fit: cover;
+            background: #eee; display: flex; align-items: center;
+            justify-content: center; color: #aaa; font-size: 2em;
+        }
+        .book-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .book-title {
+            font-size: 1.1em; font-weight: bold; margin-bottom: 5px;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .book-author { color: #666; font-size: 0.9em; margin-bottom: 10px; }
+        .book-price {
+            color: #27ae60; font-size: 1.3em; font-weight: bold; margin-top: auto;
+            margin-bottom: 12px;
+        }
+        .buy-btn {
+            display: block; text-align: center; padding: 12px;
+            background: #2ecc71; color: white; text-decoration: none;
+            border-radius: 8px; font-weight: bold; transition: background 0.3s;
+        }
+        .buy-btn:hover { background: #27ae60; }
+        .loading { text-align: center; padding: 50px; color: #999; }
+        .no-results { text-align: center; padding: 50px; color: #999; }
+        .error { text-align: center; padding: 50px; color: #e74c3c; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📚 КнигоПоиск</h1>
+        <p>Найдите любую книгу и перейдите по лучшей цене</p>
+    </header>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Введите название книги или автора...">
+    </div>
+
+    <div id="booksContainer" class="books-grid"></div>
+
+    <script>
+        const PARTNER_CODE = "newhocok1"; // Твой партнёрский код ЛитРес
+        const searchInput = document.getElementById('searchInput');
+        const booksContainer = document.getElementById('booksContainer');
+
+        let debounceTimer;
+        searchInput.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            const query = this.value.trim();
+            if (query.length < 3) {
+                booksContainer.innerHTML = '<div class="loading">Введите не менее 3 символов для поиска...</div>';
+                return;
+            }
+            debounceTimer = setTimeout(() => searchBooks(query), 500);
+        });
+
+        function searchBooks(query) {
+            booksContainer.innerHTML = '<div class="loading">🔍 Ищем книги...</div>';
+            
+            const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&langRestrict=ru&maxResults=20`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.items || data.items.length === 0) {
+                        booksContainer.innerHTML = '<div class="no-results">😕 Ничего не найдено. Попробуйте изменить запрос.</div>';
+                        return;
+                    }
+                    displayBooks(data.items);
+                })
+                .catch(error => {
+                    booksContainer.innerHTML = '<div class="error">❌ Ошибка загрузки. Попробуйте позже.</div>';
+                });
+        }
+
+        function displayBooks(items) {
+            booksContainer.innerHTML = '';
+            items.forEach(item => {
+                const info = item.volumeInfo;
+                const title = info.title || 'Без названия';
+                const authors = info.authors ? info.authors.join(', ') : 'Автор не указан';
+                const cover = info.imageLinks ? info.imageLinks.thumbnail : null;
+                const isbn = info.industryIdentifiers ? info.industryIdentifiers[0].identifier : '';
+                
+                // Формируем партнёрскую ссылку ЛитРес
+                const litresUrl = `https://www.litres.ru/search/?q=${encodeURIComponent(title + ' ' + authors)}&utm_source=partner&utm_medium=${PARTNER_CODE}`;
+                
+                const card = document.createElement('div');
+                card.className = 'book-card';
+                card.innerHTML = `
+                    ${cover ? `<img src="${cover}" alt="${title}" class="book-cover">` : '<div class="book-cover">📖</div>'}
+                    <div class="book-info">
+                        <div class="book-title">${title}</div>
+                        <div class="book-author">${authors}</div>
+                        <div class="book-price">💰 Узнать цену</div>
+                        <a href="${litresUrl}" target="_blank" rel="noopener" class="buy-btn">Купить на ЛитРес</a>
+                    </div>
+                `;
+                booksContainer.appendChild(card);
+            });
+        }
+
+        // Загружаем популярные книги при открытии сайта
+        window.addEventListener('load', () => {
+            fetch('https://www.googleapis.com/books/v1/volumes?q=subject:fiction&langRestrict=ru&maxResults=12')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.items) displayBooks(data.items);
+                });
+        });
+    </script>
+</body>
+</html>
