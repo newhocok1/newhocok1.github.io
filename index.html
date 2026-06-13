@@ -14,11 +14,9 @@
         }
         .container { max-width: 600px; margin: 0 auto; padding: 0 16px; }
 
-        /* Шапка */
         header { padding: 24px 16px 12px; }
         header h1 { font-size: 2.2em; font-weight: 700; }
 
-        /* Жанровые чипсы */
         .genres {
             display: flex; gap: 8px; overflow-x: auto;
             padding: 8px 16px 16px; scrollbar-width: none; -ms-overflow-style: none;
@@ -32,7 +30,6 @@
         }
         .chip.active { background: #2ecc71; color: #fff; }
 
-        /* Раздел Наборы */
         .section { padding: 20px 0; }
         .section-title { font-size: 1.5em; font-weight: 700; padding: 0 16px; margin-bottom: 12px; }
 
@@ -67,7 +64,6 @@
         }
         .card-btn:hover { background: #2ecc71; color: #fff; }
 
-        /* Блок приложения */
         .app-block {
             background: #F9F9F9; border-radius: 12px; padding: 20px; margin: 20px 16px;
             display: flex; align-items: center; justify-content: space-between;
@@ -90,7 +86,6 @@
             <h1>Книги</h1>
         </header>
 
-        <!-- Жанры -->
         <div class="genres">
             <button class="chip active">Все книги</button>
             <button class="chip">Бесплатно</button>
@@ -100,7 +95,6 @@
             <button class="chip">Психология</button>
         </div>
 
-        <!-- Наборы (карусель) -->
         <div class="section">
             <div class="section-title">Наборы</div>
             <div class="carousel">
@@ -137,7 +131,6 @@
             </div>
         </div>
 
-        <!-- Блок "Удобнее в приложении" -->
         <div class="app-block">
             <span class="app-text">📱 Читайте книги даже без интернета</span>
             <a href="#" class="app-btn">Открыть</a>
@@ -150,14 +143,12 @@
     </div>
 
     <script>
-        // Активный чип
         document.querySelectorAll('.chip').forEach(chip => {
             chip.addEventListener('click', function() {
                 document.querySelector('.chip.active')?.classList.remove('active');
                 this.classList.add('active');
             });
         });
-        // Кнопки-заглушки
         document.querySelectorAll('.card-btn, .app-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
