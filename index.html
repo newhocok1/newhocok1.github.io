@@ -1,212 +1,169 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>КнигоПоиск — найди книгу по лучшей цене</title>
+    <title>Книги — читайте в приложении</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f9f9f9; color: #222; min-height: 100vh; }
-        /* Тёмная тема */
-        body.dark { background: #1a1a1a; color: #eee; }
-        body.dark .book-card { background: #2a2a2a; }
-        body.dark .book-author { color: #aaa; }
-        body.dark .search-box input { background: #333; color: #fff; border-color: #555; }
-        body.dark .filter-btn { background: #333; color: #ccc; border-color: #555; }
-        body.dark .filter-btn.active { background: #3498db; color: #fff; border-color: #3498db; }
+        body {
+            font-family: 'Inter', 'Roboto', 'SF Pro', 'Segoe UI', sans-serif;
+            background: #FFFFFF;
+            color: #111;
+            line-height: 1.4;
+        }
+        .container { max-width: 600px; margin: 0 auto; padding: 0 16px; }
 
-        header { background: linear-gradient(135deg, #2c3e50, #3498db); padding: 40px 20px; text-align: center; color: white; position: relative; }
-        header h1 { font-size: 2.5em; margin-bottom: 10px; }
-        header p { font-size: 1.1em; opacity: 0.9; }
+        /* Шапка */
+        header { padding: 24px 16px 12px; }
+        header h1 { font-size: 2.2em; font-weight: 700; }
 
-        .theme-toggle { position: absolute; top: 15px; right: 20px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 0.9em; }
-        .theme-toggle:hover { background: rgba(255,255,255,0.3); }
+        /* Жанровые чипсы */
+        .genres {
+            display: flex; gap: 8px; overflow-x: auto;
+            padding: 8px 16px 16px; scrollbar-width: none; -ms-overflow-style: none;
+        }
+        .genres::-webkit-scrollbar { display: none; }
+        .chip {
+            padding: 8px 18px; border-radius: 20px; font-size: 0.95em;
+            font-weight: 500; white-space: nowrap; cursor: pointer;
+            background: #F2F2F2; color: #333; border: none;
+            transition: background 0.2s;
+        }
+        .chip.active { background: #2ecc71; color: #fff; }
 
-        .search-box { max-width: 500px; margin: 30px auto; padding: 0 20px; position: relative; }
-        .search-box input { width: 100%; padding: 15px 45px 15px 20px; font-size: 1.1em; border: 2px solid #ddd; border-radius: 30px; outline: none; transition: border 0.3s; }
-        .search-box input:focus { border-color: #3498db; }
-        .search-box .clear-btn { position: absolute; right: 30px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 1.5em; cursor: pointer; color: #999; display: none; }
-        .search-box .clear-btn.visible { display: block; }
+        /* Раздел Наборы */
+        .section { padding: 20px 0; }
+        .section-title { font-size: 1.5em; font-weight: 700; padding: 0 16px; margin-bottom: 12px; }
 
-        .history { max-width: 600px; margin: 0 auto 20px; padding: 0 20px; text-align: center; }
-        .history span { color: #999; font-size: 0.9em; }
-        .history a { color: #3498db; margin: 0 8px; cursor: pointer; text-decoration: none; }
-        .history a:hover { text-decoration: underline; }
+        .carousel {
+            display: flex; gap: 16px; overflow-x: auto;
+            padding: 0 16px 12px; scrollbar-width: thin;
+            -ms-overflow-style: auto;
+        }
+        .carousel::-webkit-scrollbar { height: 4px; }
+        .carousel::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
 
-        .filters { max-width: 600px; margin: 0 auto 20px; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-        .filter-btn { padding: 8px 16px; border: 1px solid #ddd; border-radius: 20px; background: #fff; cursor: pointer; font-size: 0.9em; transition: all 0.3s; }
-        .filter-btn.active { background: #3498db; color: #fff; border-color: #3498db; }
-        .filter-btn:hover { border-color: #3498db; }
+        .card {
+            flex: 0 0 280px; background: #F9F9F9; border-radius: 12px;
+            padding: 12px; display: flex; flex-direction: column;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .card-cover {
+            width: 100%; height: 160px; background: #E0E0E0; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3em; color: #aaa; margin-bottom: 10px;
+        }
+        .card-title { font-size: 1.2em; font-weight: 700; margin-bottom: 4px; }
+        .card-desc { font-size: 0.85em; color: #666; margin-bottom: 8px; }
+        .card-meta { display: flex; gap: 6px; align-items: center; margin-bottom: 12px; }
+        .card-genre { background: #E8E8E8; padding: 2px 10px; border-radius: 12px; font-size: 0.8em; }
+        .card-age { background: #111; color: #fff; padding: 2px 8px; border-radius: 50%; font-size: 0.75em; font-weight: 700; }
+        .card-btn {
+            margin-top: auto; text-align: center; padding: 10px; border-radius: 8px;
+            font-weight: 600; font-size: 0.9em; text-decoration: none;
+            background: #fff; color: #2ecc71; border: 1px solid #2ecc71;
+            transition: all 0.2s;
+        }
+        .card-btn:hover { background: #2ecc71; color: #fff; }
 
-        .books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 25px; padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .book-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s; display: flex; flex-direction: column; }
-        .book-card:hover { transform: translateY(-5px); }
-        .book-cover { width: 100%; height: 260px; object-fit: cover; background: #eee; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 2em; }
-        .book-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
-        .book-title { font-size: 1em; font-weight: bold; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .book-author { color: #666; font-size: 0.85em; margin-bottom: 10px; }
-        .book-price { color: #27ae60; font-size: 1.2em; font-weight: bold; margin-top: auto; margin-bottom: 12px; }
-        .buy-btn { display: block; text-align: center; padding: 12px; background: #2ecc71; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; transition: background 0.3s; }
-        .buy-btn:hover { background: #27ae60; }
-        .loading, .no-results, .error { text-align: center; padding: 50px; color: #999; }
-        .error { color: #e74c3c; }
-        footer { text-align: center; padding: 30px; color: #999; font-size: 0.9em; }
-        footer a { color: #3498db; text-decoration: none; }
+        /* Блок приложения */
+        .app-block {
+            background: #F9F9F9; border-radius: 12px; padding: 20px; margin: 20px 16px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .app-text { font-size: 0.95em; color: #333; }
+        .app-btn {
+            padding: 10px 20px; border-radius: 8px; font-weight: 600;
+            text-decoration: none; background: #2ecc71; color: #fff;
+            white-space: nowrap; transition: background 0.2s;
+        }
+        .app-btn:hover { background: #27ae60; }
+
+        footer { text-align: center; padding: 20px; color: #999; font-size: 0.85em; }
+        footer a { color: #999; text-decoration: none; }
     </style>
 </head>
 <body>
-    <header>
-        <button class="theme-toggle" onclick="toggleTheme()">🌓 Тема</button>
-        <h1>📚 КнигоПоиск</h1>
-        <p>Найдите любую книгу и перейдите по лучшей цене</p>
-    </header>
+    <div class="container">
+        <header>
+            <h1>Книги</h1>
+        </header>
 
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Введите название книги или автора..." autocomplete="off">
-        <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
+        <!-- Жанры -->
+        <div class="genres">
+            <button class="chip active">Все книги</button>
+            <button class="chip">Бесплатно</button>
+            <button class="chip">Комиксы</button>
+            <button class="chip">Романтика</button>
+            <button class="chip">Классика</button>
+            <button class="chip">Психология</button>
+        </div>
+
+        <!-- Наборы (карусель) -->
+        <div class="section">
+            <div class="section-title">Наборы</div>
+            <div class="carousel">
+                <div class="card">
+                    <div class="card-cover">📚</div>
+                    <div class="card-title">Летний книжный сет</div>
+                    <div class="card-desc">Тёплые истории для отпуска</div>
+                    <div class="card-meta">
+                        <span class="card-genre">романтика</span>
+                        <span class="card-age">16+</span>
+                    </div>
+                    <a href="#" class="card-btn">Читать в приложении</a>
+                </div>
+                <div class="card">
+                    <div class="card-cover">📖</div>
+                    <div class="card-title">Классика в одном томе</div>
+                    <div class="card-desc">Проверенные временем шедевры</div>
+                    <div class="card-meta">
+                        <span class="card-genre">классика</span>
+                        <span class="card-age">12+</span>
+                    </div>
+                    <a href="#" class="card-btn">Читать в приложении</a>
+                </div>
+                <div class="card">
+                    <div class="card-cover">🗯</div>
+                    <div class="card-title">Комиксы-бестселлеры</div>
+                    <div class="card-desc">Графические романы месяца</div>
+                    <div class="card-meta">
+                        <span class="card-genre">комикс</span>
+                        <span class="card-age">18+</span>
+                    </div>
+                    <a href="#" class="card-btn">Читать в приложении</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Блок "Удобнее в приложении" -->
+        <div class="app-block">
+            <span class="app-text">📱 Читайте книги даже без интернета</span>
+            <a href="#" class="app-btn">Открыть</a>
+        </div>
+
+        <footer>
+            <a href="#">Открыть в приложении</a><br>
+            books.yandex.ru
+        </footer>
     </div>
 
-    <div class="history" id="history"></div>
-    <div class="filters" id="filters" style="display:none;"></div>
-    <div id="booksContainer" class="books-grid"></div>
-    <footer>
-        <p>По вопросам: <a href="https://t.me/HELP_SHOP_HOCKA" target="_blank">@HELP_SHOP_HOCKA</a></p>
-    </footer>
-
     <script>
-        // ========== НАСТРОЙКИ ==========
-        const PARTNER_CODE = "027506d3"; // Твой партнёрский код ЛитРес
-        const LITRES_SEARCH = `https://www.litres.ru/search/?q=`;
-
-        // ========== ЭЛЕМЕНТЫ ==========
-        const searchInput = document.getElementById('searchInput');
-        const clearBtn = document.getElementById('clearBtn');
-        const booksContainer = document.getElementById('booksContainer');
-        const filtersDiv = document.getElementById('filters');
-        const historyDiv = document.getElementById('history');
-
-        // ========== ИСТОРИЯ ПОИСКА ==========
-        let searchHistory = JSON.parse(localStorage.getItem('bookSearchHistory') || '[]');
-
-        function saveToHistory(query) {
-            searchHistory = searchHistory.filter(q => q.toLowerCase() !== query.toLowerCase());
-            searchHistory.unshift(query);
-            if (searchHistory.length > 5) searchHistory.pop();
-            localStorage.setItem('bookSearchHistory', JSON.stringify(searchHistory));
-            renderHistory();
-        }
-
-        function renderHistory() {
-            if (searchHistory.length === 0) { historyDiv.innerHTML = ''; return; }
-            historyDiv.innerHTML = '<span>🕐 Недавно искали:</span> ' + searchHistory.map(q => `<a onclick="searchFromHistory('${q}')">${q}</a>`).join('');
-        }
-
-        function searchFromHistory(query) {
-            searchInput.value = query;
-            clearBtn.classList.add('visible');
-            searchBooks(query);
-        }
-
-        function clearSearch() {
-            searchInput.value = '';
-            clearBtn.classList.remove('visible');
-            filtersDiv.style.display = 'none';
-            loadPopularBooks();
-        }
-
-        // ========== ТЁМНАЯ ТЕМА ==========
-        function toggleTheme() {
-            document.body.classList.toggle('dark');
-            localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-        }
-        if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
-
-        // ========== ПОИСК ==========
-        let debounceTimer;
-        searchInput.addEventListener('input', function() {
-            const query = this.value.trim();
-            if (query.length > 0) clearBtn.classList.add('visible'); else clearBtn.classList.remove('visible');
-            clearTimeout(debounceTimer);
-            if (query.length < 2) {
-                if (query.length === 0) { filtersDiv.style.display = 'none'; loadPopularBooks(); }
-                return;
-            }
-            debounceTimer = setTimeout(() => searchBooks(query), 400);
-        });
-
-        function searchBooks(query) {
-            saveToHistory(query);
-            booksContainer.innerHTML = '<div class="loading">🔍 Ищем книги...</div>';
-            filtersDiv.style.display = 'flex';
-            filtersDiv.innerHTML = `
-                <button class="filter-btn active" onclick="applyFilter('all', '${query}')">Все</button>
-                <button class="filter-btn" onclick="applyFilter('ru', '${query}')">🇷🇺 Русские</button>
-                <button class="filter-btn" onclick="applyFilter('free', '${query}')">🆓 Бесплатные</button>
-                <button class="filter-btn" onclick="applyFilter('new', '${query}')">🆕 Новые</button>
-            `;
-            fetchBooks(query);
-        }
-
-        function applyFilter(filter, query) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            fetchBooks(query, filter);
-        }
-
-        function fetchBooks(query, filter = 'all') {
-            let url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=20`;
-            if (filter === 'ru') url += '&langRestrict=ru';
-            if (filter === 'free') url += '&filter=free-ebooks';
-            if (filter === 'new') url += '&orderBy=newest';
-
-            fetch(url)
-                .then(r => r.json())
-                .then(data => {
-                    if (!data.items || data.items.length === 0) {
-                        booksContainer.innerHTML = '<div class="no-results">😕 Ничего не найдено</div>';
-                        return;
-                    }
-                    displayBooks(data.items);
-                })
-                .catch(() => booksContainer.innerHTML = '<div class="error">❌ Ошибка загрузки</div>');
-        }
-
-        function displayBooks(items) {
-            booksContainer.innerHTML = '';
-            items.forEach(item => {
-                const info = item.volumeInfo;
-                const title = info.title || 'Без названия';
-                const authors = info.authors ? info.authors.join(', ') : 'Автор не указан';
-                const cover = info.imageLinks ? info.imageLinks.thumbnail : null;
-                const litresUrl = LITRES_SEARCH + encodeURIComponent(title + ' ' + authors) + '&utm_source=advcake&utm_medium=cpa&utm_campaign=affiliate&utm_content=' + PARTNER_CODE;
-
-                const card = document.createElement('div');
-                card.className = 'book-card';
-                card.innerHTML = `
-                    ${cover ? `<img src="${cover}" alt="${title}" class="book-cover">` : '<div class="book-cover">📖</div>'}
-                    <div class="book-info">
-                        <div class="book-title">${title}</div>
-                        <div class="book-author">${authors}</div>
-                        <div class="book-price">💰 Узнать цену</div>
-                        <a href="${litresUrl}" target="_blank" rel="noopener" class="buy-btn">Купить на ЛитРес</a>
-                    </div>
-                `;
-                booksContainer.appendChild(card);
+        // Активный чип
+        document.querySelectorAll('.chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                document.querySelector('.chip.active')?.classList.remove('active');
+                this.classList.add('active');
             });
-        }
-
-        function loadPopularBooks() {
-            booksContainer.innerHTML = '<div class="loading">📚 Загружаем популярные книги...</div>';
-            fetch('https://www.googleapis.com/books/v1/volumes?q=subject:fiction&langRestrict=ru&maxResults=12&orderBy=relevance')
-                .then(r => r.json())
-                .then(data => { if (data.items) displayBooks(data.items); else booksContainer.innerHTML = '<div class="no-results">Книги не найдены</div>'; })
-                .catch(() => booksContainer.innerHTML = '<div class="error">❌ Ошибка загрузки</div>');
-        }
-
-        // ========== ЗАПУСК ==========
-        renderHistory();
-        loadPopularBooks();
+        });
+        // Кнопки-заглушки
+        document.querySelectorAll('.card-btn, .app-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Приложение откроется после подключения магазина');
+            });
+        });
     </script>
 </body>
 </html>
