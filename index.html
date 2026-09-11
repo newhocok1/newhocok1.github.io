@@ -33,7 +33,6 @@
 
         .subtitle { color: #888; font-size: 1em; margin-bottom: 40px; }
 
-        /* Контейнер рулетки */
         .roulette-container {
             position: relative;
             width: 320px;
@@ -41,7 +40,7 @@
             margin-bottom: 40px;
         }
 
-        /* Круг, который вращается */
+        /* Круг, который НЕ вращается */
         .roulette-wheel {
             width: 100%;
             height: 100%;
@@ -50,7 +49,6 @@
             box-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
             position: relative;
             overflow: hidden;
-            transition: transform 6s cubic-bezier(0.17, 0.67, 0.12, 0.99);
             /* 99% зелёный, 1% красный */
             background: conic-gradient(
                 #22c55e 0% 99%,
@@ -58,19 +56,20 @@
             );
         }
 
-        /* Синяя стрелка внутри круга */
+        /* Синяя стрелка, которая вращается */
         .arrow {
             position: absolute;
             top: 50%;
             left: 50%;
             width: 8px;
-            height: 120px;
+            height: 130px;
             background: #2563eb;
             transform-origin: center bottom;
             transform: translate(-50%, -100%) rotate(0deg);
             border-radius: 4px;
             box-shadow: 0 0 10px rgba(37, 99, 235, 0.8);
             z-index: 10;
+            transition: transform 6s cubic-bezier(0.17, 0.67, 0.12, 0.99);
         }
 
         /* Круг в центре */
@@ -85,21 +84,19 @@
             z-index: 15;
         }
 
-        /* Подписи Да и Нет */
         .label-yes, .label-no {
             position: absolute;
             font-size: 1.5em;
             font-weight: 800;
             z-index: 20;
             text-shadow: 0 0 10px rgba(0,0,0,0.9);
+            color: #fff;
         }
         .label-yes {
-            color: #fff;
-            top: 55%;
+            top: 60%;
             left: 65%;
         }
         .label-no {
-            color: #fff;
             top: 20%;
             left: 50%;
             transform: translateX(-50%);
@@ -134,11 +131,11 @@
 </head>
 <body>
     <h1>Должен ли я Диме денег?</h1>
-    <p class="subtitle">Крути рулетку, чтобы узнать ответ</p>
+    <p class="subtitle">Крути стрелку, чтобы узнать ответ</p>
 
     <div class="roulette-container">
-        <div class="roulette-wheel" id="wheel">
-            <div class="arrow"></div>
+        <div class="roulette-wheel">
+            <div class="arrow" id="arrow"></div>
             <div class="center-circle"></div>
             <div class="label-no">Нет</div>
             <div class="label-yes">Да</div>
@@ -160,18 +157,18 @@
             document.getElementById('spinBtn').disabled = true;
             document.getElementById('result').classList.remove('show');
 
-            const wheel = document.getElementById('wheel');
+            const arrow = document.getElementById('arrow');
 
             // Красный сектор: от 99% до 100%, то есть от 356.4° до 360°.
             // Середина красного = 358.2°. Стрелка смотрит вверх (0°).
-            // Чтобы красный встал под стрелку, поворачиваем круг на 360° - 358.2° = 1.8°.
-            // Плюс полные обороты для эффекта.
+            // Чтобы стрелка указывала на красный сектор, она должна повернуться
+            // на угол 358.2° (плюс полные обороты).
             const extraSpins = 5 + Math.floor(Math.random() * 3);
-            const targetAngle = 360 - 358.2;
+            const targetAngle = 358.2;
             const totalRotation = currentRotation + (extraSpins * 360) + targetAngle;
 
             currentRotation = totalRotation;
-            wheel.style.transform = `rotate(${totalRotation}deg)`;
+            arrow.style.transform = `translate(-50%, -100%) rotate(${totalRotation}deg)`;
 
             setTimeout(() => {
                 document.getElementById('result').textContent = '❌ НЕТ';
