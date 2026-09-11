@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Должен ли я Диме денег?</title>
+    <title>BookFind — Найди свою следующую книгу</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -13,170 +13,477 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #fff;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            text-align: center;
+            padding-bottom: 60px;
         }
 
-        h1 {
-            font-size: 2.5em;
+        /* Шапка */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 40px;
+            border-bottom: 1px solid #1f1f1f;
+            position: sticky;
+            top: 0;
+            background: rgba(13, 13, 13, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4em;
             font-weight: 800;
-            margin-bottom: 10px;
+            color: #a855f7;
+        }
+
+        .logo span { color: #fff; }
+
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            color: #ccc;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover, nav a.active { color: #a855f7; }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-btn {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+
+        /* Главный блок */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 30px;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .hero h1 span {
             background: linear-gradient(90deg, #a855f7, #7c3aed);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .subtitle { color: #888; font-size: 1em; margin-bottom: 40px; }
-
-        .roulette-container {
-            position: relative;
-            width: 320px;
-            height: 320px;
-            margin-bottom: 40px;
+        .hero p {
+            color: #888;
+            font-size: 1.1em;
+            margin-bottom: 30px;
         }
 
-        /* Круг, который НЕ вращается */
-        .roulette-wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 6px solid #2a2a2a;
-            box-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
-            position: relative;
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
             overflow: hidden;
-            /* 99% зелёный, 1% красный */
-            background: conic-gradient(
-                #22c55e 0% 99%,
-                #ef4444 99% 100%
-            );
         }
 
-        /* Синяя стрелка, которая вращается */
-        .arrow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 8px;
-            height: 130px;
-            background: #2563eb;
-            transform-origin: center bottom;
-            transform: translate(-50%, -100%) rotate(0deg);
-            border-radius: 4px;
-            box-shadow: 0 0 10px rgba(37, 99, 235, 0.8);
-            z-index: 10;
-            transition: transform 6s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+        .search-bar input {
+            flex: 1;
+            padding: 16px 20px;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1em;
+            outline: none;
         }
 
-        /* Круг в центре */
-        .center-circle {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px; height: 50px;
-            background: #0d0d0d;
-            border-radius: 50%;
-            border: 4px solid #2563eb;
-            z-index: 15;
+        .search-bar button {
+            padding: 16px 30px;
+            background: linear-gradient(90deg, #a855f7, #7c3aed);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 1em;
         }
 
-        .label-yes, .label-no {
-            position: absolute;
+        /* Жанры */
+        .genres {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            padding: 30px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .genre-btn {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            color: #ccc;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .genre-btn:hover {
+            background: #a855f7;
+            color: #fff;
+            border-color: #a855f7;
+        }
+
+        /* Баннер книги недели */
+        .featured {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 40px;
+        }
+
+        .featured-card {
+            display: flex;
+            background: linear-gradient(135deg, #1a1025, #0d0d0d);
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            overflow: hidden;
+            min-height: 320px;
+        }
+
+        .featured-text {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .featured-tag {
+            display: inline-block;
+            background: #a855f7;
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            width: fit-content;
+        }
+
+        .featured-text h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .featured-text .author {
+            color: #a855f7;
+            margin-bottom: 15px;
+        }
+
+        .featured-text p {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .featured-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #a855f7, #7c3aed);
+            color: #fff;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            padding: 12px 28px;
+            border: 1px solid #3a3a3a;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .featured-cover {
+            width: 300px;
+            background: #2a1a3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+        }
+
+        /* Секции */
+        .section {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 40px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
             font-size: 1.5em;
             font-weight: 800;
-            z-index: 20;
-            text-shadow: 0 0 10px rgba(0,0,0,0.9);
-            color: #fff;
-        }
-        .label-yes {
-            top: 60%;
-            left: 65%;
-        }
-        .label-no {
-            top: 20%;
-            left: 50%;
-            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        button {
-            background: linear-gradient(90deg, #a855f7, #7c3aed);
-            color: #fff; border: none;
-            padding: 16px 48px;
-            font-size: 1.2em; font-weight: 700;
-            border-radius: 12px; cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+        .see-all {
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 0.9em;
         }
 
-        button:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(168, 85, 247, 0.7); }
-        button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-        .result {
-            margin-top: 30px;
-            font-size: 1.8em;
-            font-weight: 800;
-            min-height: 60px;
-            color: #ef4444;
-            opacity: 0;
-            transition: opacity 0.5s;
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
         }
-        .result.show { opacity: 1; }
 
-        .chance-info { color: #666; font-size: 0.85em; margin-top: 15px; }
+        .book-card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border: 1px solid #222;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 240px;
+            background: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            color: #555;
+            position: relative;
+        }
+
+        .book-rating {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: #facc15;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            font-weight: 700;
+        }
+
+        .book-info {
+            padding: 12px 15px;
+        }
+
+        .book-title {
+            font-size: 0.95em;
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .book-author {
+            color: #888;
+            font-size: 0.8em;
+        }
+
+        /* Футер */
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #555;
+            font-size: 0.9em;
+            border-top: 1px solid #1f1f1f;
+        }
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; }
+            nav { display: none; }
+            .hero h1 { font-size: 2em; }
+            .featured-card { flex-direction: column; }
+            .featured-cover { width: 100%; height: 200px; }
+            .featured-text { padding: 25px; }
+            .section, .featured, .genres { padding: 0 20px; }
+            .books-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .book-cover { height: 180px; }
+        }
     </style>
 </head>
 <body>
-    <h1>Должен ли я Диме денег?</h1>
-    <p class="subtitle">Крути стрелку, чтобы узнать ответ</p>
 
-    <div class="roulette-container">
-        <div class="roulette-wheel">
-            <div class="arrow" id="arrow"></div>
-            <div class="center-circle"></div>
-            <div class="label-no">Нет</div>
-            <div class="label-yes">Да</div>
+    <!-- Шапка -->
+    <header>
+        <div class="logo">📚 Book<span>Find</span></div>
+        <nav>
+            <a href="#" class="active">Главная</a>
+            <a href="#">Жанры</a>
+            <a href="#">Подборки</a>
+            <a href="#">Новинки</a>
+            <a href="#">Аудиокниги</a>
+        </nav>
+        <div class="header-actions">
+            <button class="search-btn">🔍 Поиск</button>
         </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Найдите <span>свою следующую</span> книгу</h1>
+        <p>Тысячи книг на любой вкус. Ищите, выбирайте и читайте лучшее.</p>
+        <div class="search-bar">
+            <input type="text" placeholder="Введите название книги или автора...">
+            <button>Найти</button>
+        </div>
+    </section>
+
+    <!-- Жанры -->
+    <div class="genres">
+        <button class="genre-btn">📖 Все жанры</button>
+        <button class="genre-btn">🧙 Фэнтези</button>
+        <button class="genre-btn">🔍 Детективы</button>
+        <button class="genre-btn">❤️ Романы</button>
+        <button class="genre-btn">🚀 Фантастика</button>
+        <button class="genre-btn">💼 Бизнес</button>
+        <button class="genre-btn">🧠 Психология</button>
+        <button class="genre-btn">👻 Ужасы</button>
     </div>
 
-    <button id="spinBtn" onclick="spin()">Крутить</button>
+    <!-- Книга недели -->
+    <section class="featured">
+        <div class="featured-card">
+            <div class="featured-text">
+                <span class="featured-tag">Книга недели</span>
+                <h2>Четвёртое крыло</h2>
+                <div class="author">Ребекка Яррос</div>
+                <p>Двадцатилетняя Вайолет Сорренгейл готовилась стать писцом и спокойно жить среди книг. Но мать — прославленный генерал — приказывает ей присоединиться к сотням кандидатов, стремящихся стать элитой Наварры: всадниками на драконах.</p>
+                <div class="featured-buttons">
+                    <a href="https://www.litres.ru/?utm_source=advcake&utm_medium=cpa&utm_campaign=affiliate&utm_content=027506d3" class="btn-primary">Читать на ЛитРес ↗</a>
+                    <button class="btn-secondary">Подробнее</button>
+                </div>
+            </div>
+            <div class="featured-cover">📕</div>
+        </div>
+    </section>
 
-    <div class="result" id="result"></div>
-    <p class="chance-info">Шанс: 99% — да (зелёный), 1% — нет (красный)</p>
+    <!-- Популярное -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-title">🔥 Популярное</div>
+            <a href="#" class="see-all">Смотреть все</a>
+        </div>
+        <div class="books-grid" id="popularGrid"></div>
+    </section>
+
+    <!-- Новинки -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-title">✨ Новинки</div>
+            <a href="#" class="see-all">Смотреть все</a>
+        </div>
+        <div class="books-grid" id="newGrid"></div>
+    </section>
+
+    <!-- Аудиокниги -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-title">🎧 Аудиокниги</div>
+            <a href="#" class="see-all">Смотреть все</a>
+        </div>
+        <div class="books-grid" id="audioGrid"></div>
+    </section>
+
+    <footer>
+        © 2026 BookFind — Все права защищены
+    </footer>
 
     <script>
-        let isSpinning = false;
-        let currentRotation = 0;
+        const PARTNER_CODE = "027506d3";
+        const LITRES_SEARCH = "https://www.litres.ru/search/?q=";
 
-        function spin() {
-            if (isSpinning) return;
-            isSpinning = true;
-            document.getElementById('spinBtn').disabled = true;
-            document.getElementById('result').classList.remove('show');
+        // База книг
+        const books = [
+            { title: "Ведьмак", author: "Анджей Сапковский", rating: 4.8, emoji: "🐺" },
+            { title: "1984", author: "Джордж Оруэлл", rating: 4.7, emoji: "👁" },
+            { title: "Преступление и наказание", author: "Фёдор Достоевский", rating: 4.6, emoji: "🪓" },
+            { title: "Мастер и Маргарита", author: "Михаил Булгаков", rating: 4.9, emoji: "🐈" },
+            { title: "Гарри Поттер и философский камень", author: "Дж. К. Роулинг", rating: 4.7, emoji: "⚡" },
+            { title: "Дюна", author: "Фрэнк Герберт", rating: 4.8, emoji: "🏜" },
+            { title: "Игра престолов", author: "Джордж Мартин", rating: 4.6, emoji: "🐉" },
+            { title: "Атлант расправил плечи", author: "Айн Рэнд", rating: 4.7, emoji: "🏛" }
+        ];
 
-            const arrow = document.getElementById('arrow');
-
-            // Красный сектор: от 99% до 100%, то есть от 356.4° до 360°.
-            // Середина красного = 358.2°. Стрелка смотрит вверх (0°).
-            // Чтобы стрелка указывала на красный сектор, она должна повернуться
-            // на угол 358.2° (плюс полные обороты).
-            const extraSpins = 5 + Math.floor(Math.random() * 3);
-            const targetAngle = 358.2;
-            const totalRotation = currentRotation + (extraSpins * 360) + targetAngle;
-
-            currentRotation = totalRotation;
-            arrow.style.transform = `translate(-50%, -100%) rotate(${totalRotation}deg)`;
-
-            setTimeout(() => {
-                document.getElementById('result').textContent = '❌ НЕТ';
-                document.getElementById('result').classList.add('show');
-                document.getElementById('spinBtn').disabled = false;
-                isSpinning = false;
-            }, 6000);
+        function createBookCard(book) {
+            const litresUrl = LITRES_SEARCH + encodeURIComponent(book.title + ' ' + book.author) + '&utm_source=advcake&utm_medium=cpa&utm_campaign=affiliate&utm_content=' + PARTNER_CODE;
+            return `
+                <div class="book-card" onclick="window.open('${litresUrl}', '_blank')">
+                    <div class="book-cover">
+                        ${book.emoji}
+                        <div class="book-rating">★ ${book.rating}</div>
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">${book.title}</div>
+                        <div class="book-author">${book.author}</div>
+                    </div>
+                </div>
+            `;
         }
+
+        // Заполняем секции
+        document.getElementById('popularGrid').innerHTML = books.map(createBookCard).join('');
+        document.getElementById('newGrid').innerHTML = books.slice(0, 4).map(createBookCard).join('');
+        document.getElementById('audioGrid').innerHTML = books.slice(4).map(createBookCard).join('');
     </script>
+
 </body>
 </html>
