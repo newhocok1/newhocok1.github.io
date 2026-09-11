@@ -1,192 +1,150 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KinoVerse — Фильмы и сериалы</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VORTEX — фильмы и сериалы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <aside class="sidebar">
+    <div class="logo"><span>V</span><b>VORTEX</b></div>
 
+    <nav class="main-nav">
+      <a class="active" href="#"><i>⌂</i>Главная</a>
+      <a href="#"><i>▣</i>Фильмы</a>
+      <a href="#"><i>▤</i>Сериалы</a>
+      <a href="#"><i>✧</i>Аниме</a>
+      <a href="#"><i>◈</i>Мультфильмы</a>
+      <a href="#"><i>♧</i>Новинки</a>
+      <a href="#"><i>♨</i>Популярное</a>
+      <a href="#"><i>♡</i>Мои списки</a>
+    </nav>
+
+    <div class="divider"></div>
+    <div class="side-title">Жанры <span>⌃</span></div>
+
+    <nav class="genre-nav">
+      <a href="#"><i>◉</i>Боевики</a>
+      <a href="#"><i>◉</i>Драмы</a>
+      <a href="#"><i>◉</i>Комедии</a>
+      <a href="#"><i>◉</i>Ужасы</a>
+      <a href="#"><i>◉</i>Фантастика</a>
+      <a href="#"><i>◉</i>Триллеры</a>
+      <a href="#"><i>◉</i>Приключения</a>
+      <a href="#"><i>◉</i>Мультфильмы</a>
+      <a href="#"><i>◉</i>Мелодрамы</a>
+      <a href="#"><i>◉</i>Документальные</a>
+    </nav>
+
+    <div class="side-promo">
+      <div class="promo-glow"></div>
+      <h3>Смотри где удобно</h3>
+      <p>С любого устройства<br>в любое время</p>
+      <div class="devices">▣　▯　▱</div>
+      <button>Подробнее</button>
+    </div>
+  </aside>
+
+  <main class="page">
     <header class="topbar">
-        <div class="logo">🎬 Kino<span>Verse</span></div>
-        <div class="search">
-            <span>🔍</span>
-            <input id="searchInput" placeholder="Найти фильм или сериал...">
-        </div>
+      <div class="search">
+        <span>⌕</span>
+        <input id="searchInput" placeholder="Найти фильм, сериал, актёра..." />
+      </div>
+      <div class="top-actions"><button>♧</button><button>☾</button><div class="avatar">V</div></div>
     </header>
 
     <section class="hero">
-        <div class="hero-art"></div>
-        <div class="hero-content">
-            <div class="hero-kicker">ФИЛЬМ НЕДЕЛИ</div>
-            <h1>Дюна: Часть вторая</h1>
-            <div class="hero-meta">★ 8.4　·　2024　·　Фантастика　·　2 ч 46 мин</div>
-            <p>Пол Атрейдес объединяется с Чани и фременами, чтобы отомстить заговорщикам, уничтожившим его семью.</p>
-            <div class="hero-buttons">
-                <button class="watch">▶ Смотреть</button>
-                <button class="save">＋ В список</button>
-            </div>
+      <div class="hero-art"></div>
+      <div class="hero-content">
+        <div class="hero-kicker">ПРЕМЬЕРА</div>
+        <h1>ДЖОН УИК <em>4</em></h1>
+        <p>Его легенда не знает конца</p>
+        <div class="hero-meta">Боевик　·　Триллер　·　Криминал　·　2023　·　2 ч 49 мин</div>
+        <div class="hero-buttons">
+          <button class="watch">▶　Смотреть</button>
+          <button class="save">＋　В список</button>
         </div>
+      </div>
+      <div class="hero-arrows"><button>‹</button><button>›</button></div>
+      <div class="dots"><b></b><i></i><i></i><i></i></div>
     </section>
 
-    <main class="content">
+    <section class="content-grid">
+      <div class="center">
+        <Section title="Продолжайте смотреть" id="continue">
+          <WatchCard title="Во все тяжкие" meta="S5 · E8" bg="bb"/>
+          <WatchCard title="Интерстеллар" meta="1 ч 32 мин" bg="inter"/>
+          <WatchCard title="Игра престолов" meta="S4 · E6" bg="got"/>
+          <WatchCard title="Джокер" meta="1 ч 56 мин" bg="joker"/>
+          <WatchCard title="Начало" meta="1 ч 48 мин" bg="inception"/>
+        </Section>
 
-        <section class="section">
-            <div class="section-head">
-                <h2>✨ Новинки</h2>
-                <a href="#">Смотреть все</a>
-            </div>
-            <div class="cards" id="newGrid"></div>
-        </section>
+        <Section title="Популярные фильмы" id="popular">
+          <Movie title="Дюна: Часть вторая" year="2024" rating="8.6" bg="dune"/>
+          <Movie title="Бойцовский клуб" year="1999" rating="8.8" bg="fight"/>
+          <Movie title="Интерстеллар" year="2014" rating="8.7" bg="inter"/>
+          <Movie title="Матрица" year="1999" rating="8.7" bg="matrix"/>
+          <Movie title="Гладиатор" year="2000" rating="8.5" bg="glad"/>
+          <Movie title="Паразиты" year="2019" rating="8.6" bg="parasites"/>
+        </Section>
 
-        <section class="section">
-            <div class="section-head">
-                <h2>🎬 Фильмы</h2>
-                <a href="#">Смотреть все</a>
-            </div>
-            <div class="cards" id="moviesGrid"></div>
-        </section>
+        <Section title="Новые поступления" id="new">
+          <Movie title="Одни из нас" year="2023" rating="8.8" bg="last"/>
+          <Movie title="Веном" year="2024" rating="7.2" bg="venom"/>
+          <Movie title="Человек-паук" year="2023" rating="8.1" bg="spider"/>
+          <Movie title="Тёмный рыцарь" year="2008" rating="9.0" bg="batman"/>
+          <Movie title="Без перевода" year="2024" rating="7.9" bg="noir"/>
+          <Movie title="Дюна" year="2021" rating="8.0" bg="dune2"/>
+        </Section>
+      </div>
 
-        <section class="section">
-            <div class="section-head">
-                <h2>📺 Сериалы</h2>
-                <a href="#">Смотреть все</a>
-            </div>
-            <div class="cards" id="seriesGrid"></div>
-        </section>
+      <aside class="rightbar">
+        <div class="panel">
+          <div class="panel-head"><h3>Продолжить просмотр</h3><a>Все →</a></div>
+          <Mini title="Дюна: Часть вторая" time="1:24:17 / 2:46:00" bg="dune"/>
+          <Mini title="Интерстеллар" time="1:32:08 / 2:49:00" bg="inter"/>
+          <Mini title="Во все тяжкие" time="3 сезон, 7 серия" bg="bb"/>
+        </div>
 
-    </main>
+        <div class="panel top10">
+          <div class="panel-head"><h3>Топ 10 за неделю</h3><a>Все →</a></div>
+          <ol>
+            <li><span>1</span><b class="thumb dune"></b><strong>Дюна: Часть вторая</strong><em>★ 8.6</em></li>
+            <li><span>2</span><b class="thumb inter"></b><strong>Интерстеллар</strong><em>★ 8.7</em></li>
+            <li><span>3</span><b class="thumb glad"></b><strong>Гладиатор</strong><em>★ 8.5</em></li>
+            <li><span>4</span><b class="thumb joker"></b><strong>Джокер</strong><em>★ 8.4</em></li>
+            <li><span>5</span><b class="thumb fight"></b><strong>Бойцовский клуб</strong><em>★ 8.8</em></li>
+            <li><span>6</span><b class="thumb matrix"></b><strong>Матрица</strong><em>★ 8.7</em></li>
+            <li><span>7</span><b class="thumb inception"></b><strong>Начало</strong><em>★ 8.6</em></li>
+            <li><span>8</span><b class="thumb parasites"></b><strong>Паразиты</strong><em>★ 8.6</em></li>
+            <li><span>9</span><b class="thumb noir"></b><strong>Однажды в Голливуде</strong><em>★ 8.1</em></li>
+            <li><span>10</span><b class="thumb batman"></b><strong>Тёмный рыцарь</strong><em>★ 9.0</em></li>
+          </ol>
+        </div>
 
-    <footer>
-        © 2026 KinoVerse — Все права защищены
-    </footer>
+        <div class="genre-card">
+          <div class="genre-art"></div>
+          <h3>Любимые жанры<br>в одном месте</h3>
+          <p>От боевиков до артхауса —<br>выбирай то, что по душе</p>
+          <button>Перейти к жанрам</button>
+        </div>
+      </aside>
+    </section>
+  </main>
 
-    <script>
-        // ============================================
-        // СПИСОК ФИЛЬМОВ И СЕРИАЛОВ
-        // ============================================
-        // Чтобы добавить новый фильм, скопируй блок { ... } и вставь ниже через запятую.
-        // Поля:
-        //   title — название
-        //   year — год
-        //   rating — рейтинг (число)
-        //   genre — жанр
-        //   type — "movie" для фильма, "series" для сериала
-        //   poster — ссылка на картинку
-        //   link — ссылка куда ведёт кнопка
-
-        const content = [
-            {
-                title: "Джон Уик 4",
-                year: 2023,
-                rating: 7.6,
-                genre: "Боевик",
-                type: "movie",
-                poster: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400",
-                link: "#"
-            },
-            {
-                title: "Интерстеллар",
-                year: 2014,
-                rating: 8.7,
-                genre: "Фантастика",
-                type: "movie",
-                poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400",
-                link: "#"
-            },
-            {
-                title: "Бойцовский клуб",
-                year: 1999,
-                rating: 8.8,
-                genre: "Драма",
-                type: "movie",
-                poster: "https://images.unsplash.com/photo-1476275466078-4007374efbbe?w=400",
-                link: "#"
-            },
-            {
-                title: "Начало",
-                year: 2010,
-                rating: 8.8,
-                genre: "Фантастика",
-                type: "movie",
-                poster: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400",
-                link: "#"
-            },
-            {
-                title: "Гладиатор",
-                year: 2000,
-                rating: 8.5,
-                genre: "Боевик",
-                type: "movie",
-                poster: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400",
-                link: "#"
-            },
-            {
-                title: "Матрица",
-                year: 1999,
-                rating: 8.7,
-                genre: "Фантастика",
-                type: "movie",
-                poster: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=400",
-                link: "#"
-            },
-            {
-                title: "Во все тяжкие",
-                year: 2008,
-                rating: 9.5,
-                genre: "Драма",
-                type: "series",
-                poster: "https://images.unsplash.com/photo-1618666012174-83b56e4326eb?w=400",
-                link: "#"
-            },
-            {
-                title: "Игра престолов",
-                year: 2011,
-                rating: 9.2,
-                genre: "Фэнтези",
-                type: "series",
-                poster: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400",
-                link: "#"
-            },
-            {
-                title: "Чёрное зеркало",
-                year: 2011,
-                rating: 8.8,
-                genre: "Фантастика",
-                type: "series",
-                poster: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=400",
-                link: "#"
-            }
-        ];
-
-        function createCard(item) {
-            return `
-                <div class="card" onclick="window.open('${item.link}', '_blank')">
-                    <div class="card-poster">
-                        <img src="${item.poster}" alt="${item.title}" onerror="this.style.display='none'; this.parentElement.innerHTML='🎬';">
-                        <div class="card-rating">★ ${item.rating}</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">${item.title}</div>
-                        <div class="card-meta">${item.year} · ${item.genre}</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        document.getElementById('newGrid').innerHTML = content.slice(0, 6).map(createCard).join('');
-        document.getElementById('moviesGrid').innerHTML = content.filter(i => i.type === 'movie').map(createCard).join('');
-        document.getElementById('seriesGrid').innerHTML = content.filter(i => i.type === 'series').map(createCard).join('');
-
-        document.getElementById('searchInput').addEventListener('input', function(e) {
-            const q = e.target.value.toLowerCase();
-            document.querySelectorAll('.card').forEach(card => {
-                const title = card.querySelector('.card-title').textContent.toLowerCase();
-                card.style.display = title.includes(q) ? '' : 'none';
-            });
-        });
-    </script>
-
+  <script>
+    const input = document.querySelector('#searchInput');
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      document.querySelectorAll('.movie').forEach(card => {
+        card.style.display = !q || card.innerText.toLowerCase().includes(q) ? '' : 'none';
+      });
+    });
+  </script>
 </body>
-</html>
+          </html>
