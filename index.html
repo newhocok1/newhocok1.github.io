@@ -33,6 +33,7 @@
 
         .subtitle { color: #888; font-size: 1em; margin-bottom: 40px; }
 
+        /* Контейнер рулетки */
         .roulette-container {
             position: relative;
             width: 320px;
@@ -40,6 +41,7 @@
             margin-bottom: 40px;
         }
 
+        /* Круг, который вращается */
         .roulette-wheel {
             width: 100%;
             height: 100%;
@@ -49,39 +51,58 @@
             position: relative;
             overflow: hidden;
             transition: transform 6s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-            /* 99% синий, 1% жёлтый */
+            /* 99% зелёный, 1% красный */
             background: conic-gradient(
-                #3b82f6 0% 99%,
-                #facc15 99% 100%
+                #22c55e 0% 99%,
+                #ef4444 99% 100%
             );
         }
 
-        /* Зелёная стрелка */
-        .pointer {
+        /* Синяя стрелка внутри круга */
+        .arrow {
             position: absolute;
-            top: -15px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 25px solid #22c55e; /* зелёный */
+            width: 8px;
+            height: 120px;
+            background: #2563eb;
+            transform-origin: center bottom;
+            transform: translate(-50%, -100%) rotate(0deg);
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.8);
             z-index: 10;
-            filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.8));
         }
 
+        /* Круг в центре */
         .center-circle {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 60px; height: 60px;
+            width: 50px; height: 50px;
             background: #0d0d0d;
             border-radius: 50%;
-            border: 4px solid #a855f7;
-            z-index: 5;
-            display: flex; align-items: center; justify-content: center;
+            border: 4px solid #2563eb;
+            z-index: 15;
+        }
+
+        /* Подписи Да и Нет */
+        .label-yes, .label-no {
+            position: absolute;
             font-size: 1.5em;
+            font-weight: 800;
+            z-index: 20;
+            text-shadow: 0 0 10px rgba(0,0,0,0.9);
+        }
+        .label-yes {
+            color: #fff;
+            top: 55%;
+            left: 65%;
+        }
+        .label-no {
+            color: #fff;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         button {
@@ -102,7 +123,7 @@
             font-size: 1.8em;
             font-weight: 800;
             min-height: 60px;
-            color: #facc15;
+            color: #ef4444;
             opacity: 0;
             transition: opacity 0.5s;
         }
@@ -116,15 +137,18 @@
     <p class="subtitle">Крути рулетку, чтобы узнать ответ</p>
 
     <div class="roulette-container">
-        <div class="pointer"></div>
-        <div class="roulette-wheel" id="wheel"></div>
-        <div class="center-circle">🎰</div>
+        <div class="roulette-wheel" id="wheel">
+            <div class="arrow"></div>
+            <div class="center-circle"></div>
+            <div class="label-no">Нет</div>
+            <div class="label-yes">Да</div>
+        </div>
     </div>
 
     <button id="spinBtn" onclick="spin()">Крутить</button>
 
     <div class="result" id="result"></div>
-    <p class="chance-info">Шанс: 99% — отдам (синий), 1% — не отдам (жёлтый)</p>
+    <p class="chance-info">Шанс: 99% — да (зелёный), 1% — нет (красный)</p>
 
     <script>
         let isSpinning = false;
@@ -138,9 +162,9 @@
 
             const wheel = document.getElementById('wheel');
 
-            // Жёлтый сектор: от 99% до 100%, то есть от 356.4° до 360°.
-            // Середина жёлтого = 358.2°. Стрелка сверху = 0°.
-            // Чтобы жёлтый встал под стрелку, поворачиваем на 360° - 358.2° = 1.8°.
+            // Красный сектор: от 99% до 100%, то есть от 356.4° до 360°.
+            // Середина красного = 358.2°. Стрелка смотрит вверх (0°).
+            // Чтобы красный встал под стрелку, поворачиваем круг на 360° - 358.2° = 1.8°.
             // Плюс полные обороты для эффекта.
             const extraSpins = 5 + Math.floor(Math.random() * 3);
             const targetAngle = 360 - 358.2;
@@ -150,7 +174,7 @@
             wheel.style.transform = `rotate(${totalRotation}deg)`;
 
             setTimeout(() => {
-                document.getElementById('result').textContent = '❌ НЕ ОТДАМ';
+                document.getElementById('result').textContent = '❌ НЕТ';
                 document.getElementById('result').classList.add('show');
                 document.getElementById('spinBtn').disabled = false;
                 isSpinning = false;
