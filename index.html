@@ -4,429 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KinoVerse — Фильмы и сериалы</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background: #050507;
-            background-image: radial-gradient(ellipse at 50% -20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
-            background-attachment: fixed;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #e5e5e5;
-            min-height: 100vh;
-            padding-bottom: 40px;
-        }
-
-        /* Шапка */
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 25px;
-            background: rgba(5, 5, 7, 0.95);
-            backdrop-filter: blur(20px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.08);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1em;
-            font-weight: 800;
-        }
-
-        .logo-icon {
-            width: 26px;
-            height: 26px;
-            background: linear-gradient(135deg, #6d28d9, #8b5cf6);
-            border-radius: 7px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8em;
-        }
-
-        .logo-text span { color: #8b5cf6; }
-
-        nav {
-            display: flex;
-            gap: 18px;
-        }
-
-        nav a {
-            color: #777;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.75em;
-            transition: all 0.3s;
-            padding-bottom: 2px;
-            border-bottom: 2px solid transparent;
-        }
-
-        nav a:hover, nav a.active {
-            color: #ddd;
-            border-bottom-color: #8b5cf6;
-        }
-
-        .search-header {
-            background: rgba(20, 20, 28, 0.5);
-            border: 1px solid rgba(139, 92, 246, 0.15);
-            color: #bbb;
-            padding: 6px 14px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.75em;
-            width: 180px;
-        }
-
-        .search-header input {
-            background: transparent;
-            border: none;
-            color: #fff;
-            outline: none;
-            font-size: 0.95em;
-            width: 100%;
-        }
-
-        .search-header input::placeholder { color: #555; }
-
-        /* Баннер */
-        .hero {
-            max-width: 1100px;
-            margin: 15px auto;
-            padding: 0 25px;
-        }
-
-        .hero-card {
-            position: relative;
-            display: flex;
-            border-radius: 14px;
-            overflow: hidden;
-            min-height: 200px;
-            background: rgba(12, 8, 20, 0.8);
-            border: 1px solid rgba(139, 92, 246, 0.12);
-        }
-
-        .hero-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200') center/cover;
-            opacity: 0.08;
-            z-index: 0;
-            filter: brightness(0.4) saturate(0.5);
-        }
-
-        .hero-text {
-            position: relative;
-            z-index: 1;
-            flex: 1;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .hero-tag {
-            display: inline-block;
-            background: rgba(139, 92, 246, 0.2);
-            color: #a78bfa;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.65em;
-            font-weight: 700;
-            margin-bottom: 8px;
-            width: fit-content;
-            border: 1px solid rgba(139, 92, 246, 0.3);
-        }
-
-        .hero-text h1 {
-            font-size: 1.5em;
-            margin-bottom: 6px;
-            color: #fff;
-        }
-
-        .hero-meta {
-            display: flex;
-            gap: 12px;
-            color: #888;
-            font-size: 0.75em;
-            margin-bottom: 10px;
-        }
-
-        .hero-meta .rating { color: #facc15; font-weight: 700; }
-
-        .hero-text p {
-            color: #999;
-            line-height: 1.5;
-            margin-bottom: 15px;
-            max-width: 450px;
-            font-size: 0.78em;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(90deg, #8b5cf6, #6d28d9);
-            color: #fff;
-            padding: 9px 20px;
-            border: none;
-            border-radius: 7px;
-            font-weight: 700;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.78em;
-            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #ccc;
-            padding: 9px 20px;
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 7px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 0.78em;
-        }
-
-        .hero-poster {
-            position: relative;
-            z-index: 1;
-            width: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-        }
-
-        .hero-poster img {
-            width: 100%;
-            max-width: 110px;
-            border-radius: 8px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.8);
-        }
-
-        /* Секции */
-        .section {
-            max-width: 1100px;
-            margin: 25px auto;
-            padding: 0 25px;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
-        }
-
-        .section-title {
-            font-size: 1em;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #fff;
-        }
-
-        .see-all {
-            color: #8b5cf6;
-            text-decoration: none;
-            font-size: 0.72em;
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-        }
-
-        .card {
-            background: rgba(15, 15, 22, 0.6);
-            border-radius: 9px;
-            overflow: hidden;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: 1px solid rgba(139, 92, 246, 0.08);
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(139, 92, 246, 0.25);
-            border-color: rgba(139, 92, 246, 0.4);
-        }
-
-        .card-poster {
-            width: 100%;
-            height: 260px;
-            background: #0f0f16;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5em;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-poster img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.8);
-            transition: filter 0.3s;
-        }
-
-        .card:hover .card-poster img {
-            filter: brightness(1);
-        }
-
-        .card-rating {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            background: rgba(0,0,0,0.85);
-            color: #facc15;
-            padding: 2px 7px;
-            border-radius: 5px;
-            font-size: 0.65em;
-            font-weight: 700;
-            z-index: 2;
-        }
-
-        .card-info {
-            padding: 9px 10px;
-        }
-
-        .card-title {
-            font-size: 0.78em;
-            font-weight: 700;
-            margin-bottom: 3px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            line-height: 1.3;
-            color: #ddd;
-        }
-
-        .card-meta {
-            color: #555;
-            font-size: 0.65em;
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px;
-            color: #333;
-            font-size: 0.8em;
-        }
-
-        /* Адаптив */
-        @media (max-width: 900px) {
-            header { padding: 10px 15px; }
-            nav { display: none; }
-            .search-header { width: 140px; }
-            .hero { padding: 0 15px; }
-            .hero-card { flex-direction: column-reverse; min-height: auto; }
-            .hero-poster { width: 100%; padding: 12px; }
-            .hero-poster img { max-width: 90px; }
-            .hero-text { padding: 18px; }
-            .hero-text h1 { font-size: 1.2em; }
-            .hero-text p { font-size: 0.72em; }
-            .section { padding: 0 15px; }
-            .cards-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-            .card-poster { height: 200px; }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Шапка -->
-    <header>
-        <div class="logo">
-            <div class="logo-icon">🎬</div>
-            <div class="logo-text">Kino<span>Verse</span></div>
-        </div>
-        <nav>
-            <a href="#" class="active">Главная</a>
-            <a href="#">Фильмы</a>
-            <a href="#">Сериалы</a>
-            <a href="#">Подборки</a>
-        </nav>
-        <div class="search-header">
+    <header class="topbar">
+        <div class="logo">🎬 Kino<span>Verse</span></div>
+        <div class="search">
             <span>🔍</span>
-            <input type="text" id="searchInput" placeholder="Поиск...">
+            <input id="searchInput" placeholder="Найти фильм или сериал...">
         </div>
     </header>
 
-    <!-- Баннер -->
     <section class="hero">
-        <div class="hero-card">
-            <div class="hero-text">
-                <span class="hero-tag">Фильм недели</span>
-                <h1>Дюна: Часть вторая</h1>
-                <div class="hero-meta">
-                    <span class="rating">★ 8.4</span>
-                    <span>2024</span>
-                    <span>Фантастика</span>
-                </div>
-                <p>Пол Атрейдес объединяется с Чани и фременами, чтобы отомстить заговорщикам, уничтожившим его семью.</p>
-                <div class="hero-buttons">
-                    <a href="#" class="btn-primary">▶ Смотреть</a>
-                    <button class="btn-secondary">Подробнее</button>
-                </div>
-            </div>
-            <div class="hero-poster">
-                <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400" alt="Дюна">
+        <div class="hero-art"></div>
+        <div class="hero-content">
+            <div class="hero-kicker">ФИЛЬМ НЕДЕЛИ</div>
+            <h1>Дюна: Часть вторая</h1>
+            <div class="hero-meta">★ 8.4　·　2024　·　Фантастика　·　2 ч 46 мин</div>
+            <p>Пол Атрейдес объединяется с Чани и фременами, чтобы отомстить заговорщикам, уничтожившим его семью.</p>
+            <div class="hero-buttons">
+                <button class="watch">▶ Смотреть</button>
+                <button class="save">＋ В список</button>
             </div>
         </div>
     </section>
 
-    <!-- Новинки -->
-    <section class="section">
-        <div class="section-header">
-            <div class="section-title">✨ Новинки</div>
-            <a href="#" class="see-all">Смотреть все</a>
-        </div>
-        <div class="cards-grid" id="newGrid"></div>
-    </section>
+    <main class="content">
 
-    <!-- Фильмы -->
-    <section class="section">
-        <div class="section-header">
-            <div class="section-title">🎬 Фильмы</div>
-            <a href="#" class="see-all">Смотреть все</a>
-        </div>
-        <div class="cards-grid" id="moviesGrid"></div>
-    </section>
+        <section class="section">
+            <div class="section-head">
+                <h2>✨ Новинки</h2>
+                <a href="#">Смотреть все</a>
+            </div>
+            <div class="cards" id="newGrid"></div>
+        </section>
 
-    <!-- Сериалы -->
-    <section class="section">
-        <div class="section-header">
-            <div class="section-title">📺 Сериалы</div>
-            <a href="#" class="see-all">Смотреть все</a>
-        </div>
-        <div class="cards-grid" id="seriesGrid"></div>
-    </section>
+        <section class="section">
+            <div class="section-head">
+                <h2>🎬 Фильмы</h2>
+                <a href="#">Смотреть все</a>
+            </div>
+            <div class="cards" id="moviesGrid"></div>
+        </section>
+
+        <section class="section">
+            <div class="section-head">
+                <h2>📺 Сериалы</h2>
+                <a href="#">Смотреть все</a>
+            </div>
+            <div class="cards" id="seriesGrid"></div>
+        </section>
+
+    </main>
 
     <footer>
         © 2026 KinoVerse — Все права защищены
     </footer>
 
     <script>
+        // ============================================
+        // СПИСОК ФИЛЬМОВ И СЕРИАЛОВ
+        // ============================================
+        // Чтобы добавить новый фильм, скопируй блок { ... } и вставь ниже через запятую.
+        // Поля:
+        //   title — название
+        //   year — год
+        //   rating — рейтинг (число)
+        //   genre — жанр
+        //   type — "movie" для фильма, "series" для сериала
+        //   poster — ссылка на картинку
+        //   link — ссылка куда ведёт кнопка
+
         const content = [
             {
                 title: "Джон Уик 4",
@@ -434,7 +83,7 @@
                 rating: 7.6,
                 genre: "Боевик",
                 type: "movie",
-                poster: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300",
+                poster: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400",
                 link: "#"
             },
             {
@@ -443,7 +92,7 @@
                 rating: 8.7,
                 genre: "Фантастика",
                 type: "movie",
-                poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300",
+                poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400",
                 link: "#"
             },
             {
@@ -452,7 +101,7 @@
                 rating: 8.8,
                 genre: "Драма",
                 type: "movie",
-                poster: "https://images.unsplash.com/photo-1476275466078-4007374efbbe?w=300",
+                poster: "https://images.unsplash.com/photo-1476275466078-4007374efbbe?w=400",
                 link: "#"
             },
             {
@@ -461,7 +110,7 @@
                 rating: 8.8,
                 genre: "Фантастика",
                 type: "movie",
-                poster: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=300",
+                poster: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400",
                 link: "#"
             },
             {
@@ -470,7 +119,7 @@
                 rating: 8.5,
                 genre: "Боевик",
                 type: "movie",
-                poster: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=300",
+                poster: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400",
                 link: "#"
             },
             {
@@ -479,7 +128,7 @@
                 rating: 8.7,
                 genre: "Фантастика",
                 type: "movie",
-                poster: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=300",
+                poster: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=400",
                 link: "#"
             },
             {
@@ -488,7 +137,7 @@
                 rating: 9.5,
                 genre: "Драма",
                 type: "series",
-                poster: "https://images.unsplash.com/photo-1618666012174-83b56e4326eb?w=300",
+                poster: "https://images.unsplash.com/photo-1618666012174-83b56e4326eb?w=400",
                 link: "#"
             },
             {
@@ -497,7 +146,7 @@
                 rating: 9.2,
                 genre: "Фэнтези",
                 type: "series",
-                poster: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=300",
+                poster: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400",
                 link: "#"
             },
             {
@@ -506,7 +155,7 @@
                 rating: 8.8,
                 genre: "Фантастика",
                 type: "series",
-                poster: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=300",
+                poster: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=400",
                 link: "#"
             }
         ];
@@ -531,15 +180,10 @@
         document.getElementById('seriesGrid').innerHTML = content.filter(i => i.type === 'series').map(createCard).join('');
 
         document.getElementById('searchInput').addEventListener('input', function(e) {
-            const query = e.target.value.toLowerCase();
-            const allCards = document.querySelectorAll('.card');
-            allCards.forEach(card => {
+            const q = e.target.value.toLowerCase();
+            document.querySelectorAll('.card').forEach(card => {
                 const title = card.querySelector('.card-title').textContent.toLowerCase();
-                if (title.includes(query)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = title.includes(q) ? '' : 'none';
             });
         });
     </script>
