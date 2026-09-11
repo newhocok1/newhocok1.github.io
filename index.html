@@ -56,6 +56,7 @@
             );
         }
 
+        /* Зелёная стрелка */
         .pointer {
             position: absolute;
             top: -15px;
@@ -65,9 +66,9 @@
             height: 0;
             border-left: 15px solid transparent;
             border-right: 15px solid transparent;
-            border-top: 25px solid #000000;
+            border-top: 25px solid #22c55e; /* зелёный */
             z-index: 10;
-            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.8));
+            filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.8));
         }
 
         .center-circle {
@@ -137,6 +138,10 @@
 
             const wheel = document.getElementById('wheel');
 
+            // Жёлтый сектор: от 99% до 100%, то есть от 356.4° до 360°.
+            // Середина жёлтого = 358.2°. Стрелка сверху = 0°.
+            // Чтобы жёлтый встал под стрелку, поворачиваем на 360° - 358.2° = 1.8°.
+            // Плюс полные обороты для эффекта.
             const extraSpins = 5 + Math.floor(Math.random() * 3);
             const targetAngle = 360 - 358.2;
             const totalRotation = currentRotation + (extraSpins * 360) + targetAngle;
