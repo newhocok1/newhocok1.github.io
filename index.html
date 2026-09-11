@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Должен ли я Диме денег?</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background: #0d0d0d;
@@ -35,13 +31,8 @@
             background-clip: text;
         }
 
-        .subtitle {
-            color: #888;
-            font-size: 1em;
-            margin-bottom: 40px;
-        }
+        .subtitle { color: #888; font-size: 1em; margin-bottom: 40px; }
 
-        /* Рулетка */
         .roulette-container {
             position: relative;
             width: 320px;
@@ -58,23 +49,13 @@
             position: relative;
             overflow: hidden;
             transition: transform 6s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-        }
-
-        /* Сектора рулетки (упрощённо: 99% зелёный, 1% красный) */
-        .roulette-wheel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            /* 99% синий, 1% жёлтый */
             background: conic-gradient(
-                #22c55e 0% 99%,
-                #ef4444 99% 100%
+                #3b82f6 0% 99%,
+                #facc15 99% 100%
             );
         }
 
-        /* Стрелка */
         .pointer {
             position: absolute;
             top: -15px;
@@ -84,74 +65,49 @@
             height: 0;
             border-left: 15px solid transparent;
             border-right: 15px solid transparent;
-            border-top: 25px solid #a855f7;
+            border-top: 25px solid #000000;
             z-index: 10;
-            filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.8));
+            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.8));
         }
 
-        /* Центр рулетки */
         .center-circle {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             background: #0d0d0d;
             border-radius: 50%;
             border: 4px solid #a855f7;
             z-index: 5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             font-size: 1.5em;
         }
 
-        /* Кнопка */
         button {
             background: linear-gradient(90deg, #a855f7, #7c3aed);
-            color: #fff;
-            border: none;
+            color: #fff; border: none;
             padding: 16px 48px;
-            font-size: 1.2em;
-            font-weight: 700;
-            border-radius: 12px;
-            cursor: pointer;
+            font-size: 1.2em; font-weight: 700;
+            border-radius: 12px; cursor: pointer;
             transition: all 0.3s;
             box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
         }
 
-        button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(168, 85, 247, 0.7);
-        }
+        button:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(168, 85, 247, 0.7); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Результат */
         .result {
             margin-top: 30px;
             font-size: 1.8em;
             font-weight: 800;
             min-height: 60px;
-            color: #ef4444;
+            color: #facc15;
             opacity: 0;
             transition: opacity 0.5s;
         }
+        .result.show { opacity: 1; }
 
-        .result.show {
-            opacity: 1;
-        }
-
-        .chance-info {
-            color: #666;
-            font-size: 0.85em;
-            margin-top: 15px;
-        }
+        .chance-info { color: #666; font-size: 0.85em; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -167,7 +123,7 @@
     <button id="spinBtn" onclick="spin()">Крутить</button>
 
     <div class="result" id="result"></div>
-    <p class="chance-info">Шанс: 99% — отдам, 1% — не отдам</p>
+    <p class="chance-info">Шанс: 99% — отдам (синий), 1% — не отдам (жёлтый)</p>
 
     <script>
         let isSpinning = false;
@@ -181,20 +137,13 @@
 
             const wheel = document.getElementById('wheel');
 
-            // Мы всегда хотим, чтобы выпал 1% (красный сектор).
-            // Красный сектор находится в диапазоне от 99% до 100% (от 356.4° до 360°).
-            // Стрелка сверху (0°). Чтобы красный сектор оказался под стрелкой,
-            // нужно повернуть колесо так, чтобы середина красного сектора (358.2°) встала под 0°.
-            // Значит, угол поворота = 360° - 358.2° = 1.8° (плюс полные обороты для эффекта).
-
-            const extraSpins = 5 + Math.floor(Math.random() * 3); // 5-7 полных оборотов
-            const targetAngle = 360 - 358.2; // ~1.8°, чтобы красный сектор встал под стрелку
+            const extraSpins = 5 + Math.floor(Math.random() * 3);
+            const targetAngle = 360 - 358.2;
             const totalRotation = currentRotation + (extraSpins * 360) + targetAngle;
 
             currentRotation = totalRotation;
             wheel.style.transform = `rotate(${totalRotation}deg)`;
 
-            // Через 6 секунд (после анимации) показываем результат
             setTimeout(() => {
                 document.getElementById('result').textContent = '❌ НЕ ОТДАМ';
                 document.getElementById('result').classList.add('show');
